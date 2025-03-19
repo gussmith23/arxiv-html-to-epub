@@ -1,0 +1,35 @@
+name: Move already-read papers to archive
+
+on:
+  workflow_dispatch:
+
+env:
+  PAPER_LIST_ISSUE_NO: 1
+  ARCHIVE_LIST_ISSUE_NO: 2
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    permissions:
+      # Needed for posting converted files to the repo.
+      issues: write
+
+    steps:
+      # Find comments on the paper list issue that have a :+1: reaction.
+      - name: Get comments on paper list issue
+        id: get-comments
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: comments } = await github.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ env.PAPER_LIST_ISSUE_NO }}
+            });
+            return comments;
+      - name: Filter comments
+        id: filter-comments
+        run: |
+          echo "${{ steps.get-comments.outputs.data }}" | jq '.[] | select(.reactions."+1" != null) | .id' > comments.txt
+          cat comments.txt
