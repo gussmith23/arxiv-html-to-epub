@@ -37,7 +37,7 @@ jobs:
           python3 main.py --url ${{ github.event.inputs.paper_url }} --filename paper.epub
 
       - name: Upload paper.epub
-        id:: upload-paper
+        id: upload-paper
         uses: actions/upload-artifact@v4
         with:
           name: paper
