@@ -40,7 +40,7 @@ jobs:
         id: upload-paper
         uses: actions/upload-artifact@v4
         with:
-          name: paper
+          name: paper.epub
           path: paper.epub
       
       - name: Post comment on issue with link to paper artifact
@@ -49,5 +49,5 @@ jobs:
           issue-number: ${{ env.PAPER_LIST_ISSUE_NO }}
           body: |
             Original URL: ${{ github.event.inputs.paper_url }}
-            Converted paper: [paper.epub](${{ steps.upload-paper.outputs.artifact_url }})
+            Converted paper: [paper.epub](${{ steps.upload-paper.outputs.artifact-url }})
 
