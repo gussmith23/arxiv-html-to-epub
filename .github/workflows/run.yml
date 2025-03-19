@@ -49,5 +49,5 @@ jobs:
           issue-number: ${{ env.PAPER_LIST_ISSUE_NO }}
           body: |
             Original URL: ${{ github.event.inputs.paper_url }}
-            Converted paper: [paper.epub](${{ steps.upload-paper.outputs.artifact-url }})
+            Converted paper: ${{ steps.upload-paper.outputs.artifact-url }}
 
