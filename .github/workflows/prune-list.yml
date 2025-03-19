@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 env:
-  PAPER_LIST_ISSUE_NO: 1
-  ARCHIVE_LIST_ISSUE_NO: 2
+  PAPER_LIST_ISSUE_NO: 2
+  ARCHIVE_LIST_ISSUE_NO: 1
 
 jobs:
   run:
