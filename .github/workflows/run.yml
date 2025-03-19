@@ -1,0 +1,52 @@
+name: Convert paper
+
+on:
+  workflow_dispatch:
+    inputs:
+      paper_url:
+        description: 'URL of paper to convert. Should be the path to the HTML version of the paper.'
+        required: true
+        type: string
+
+env:
+  PAPER_LIST_ISSUE_NO: 1
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    permissions:
+      # Needed for posting converted files to the repo.
+      issues: write
+
+    steps:
+      # Messy: we need to checkout the repo first, because otherwise it deletes
+      # files.
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Install dependencies
+        # Install wget and pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget pandoc
+        
+      - name: Run script
+        run: |
+          python3 main.py --url ${{ github.event.inputs.paper_url }} --filename paper.epub
+
+      - name: Upload paper.epub
+        id:: upload-paper
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper
+      
+      - name: Post comment on issue with link to paper artifact
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ env.PAPER_LIST_ISSUE_NO }}
+          body: |
+            Original URL: ${{ github.event.inputs.paper_url }}
+            Converted paper: [paper.epub](${{ steps.upload-paper.outputs.artifact_url }})
+
