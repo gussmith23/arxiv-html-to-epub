@@ -15,9 +15,7 @@ jobs:
       issues: write
 
     steps:
-      # Find comments on the paper list issue that have a :+1: reaction.
-      - name: Get comments on paper list issue
-        id: get-comments
+      - name: Move already-read papers to archive
         uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -27,9 +25,22 @@ jobs:
               repo: context.repo.repo,
               issue_number: ${{ env.PAPER_LIST_ISSUE_NO }}
             });
-            return comments;
-      - name: Filter comments
-        id: filter-comments
-        run: |
-          echo "${{ steps.get-comments.outputs.data }}" | jq '.[] | select(.reactions."+1" != null) | .id' > comments.txt
-          cat comments.txt
+
+            // Filter comments that have a :+1: reaction.
+            const filteredComments = comments.filter(comment => comment.reactions["+1"] != null);
+            console.log(JSON.stringify(filteredComments));
+
+            // Move the comments to the archive list issue.
+            for (const comment of filteredComments) {
+              await github.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: ${{ env.ARCHIVE_LIST_ISSUE_NO }},
+                body: comment.body
+              });
+              await github.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: comment.id
+              });
+            }
