@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       paper_url:
-        description: 'URL of paper to convert. Should be the path to the HTML version of the paper.'
+        description: 'Arxiv URL of paper to convert. Should be the path to the HTML version of the paper, e.g. https://arxiv.org/html/xxxx.xxxxx'
         required: true
         type: string
 
@@ -41,6 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: paper
+          path: paper.epub
       
       - name: Post comment on issue with link to paper artifact
         uses: peter-evans/create-or-update-comment@v4
