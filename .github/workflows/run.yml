@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget pandoc xmllint
+          sudo apt-get install -y wget pandoc libxml2-utils
         
       - name: Run script
         run: |
