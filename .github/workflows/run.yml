@@ -43,11 +43,17 @@ jobs:
           name: paper.epub
           path: paper.epub
       
+      - name: Get paper title
+        id: get-paper-title
+        run: |
+          echo "PAPER_TITLE=$(xmllint -html -xpath '//head/title/text()' -)" >> $GITHUB_OUTPUT"
+
       - name: Post comment on issue with link to paper artifact
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ env.PAPER_LIST_ISSUE_NO }}
           body: |
+            ## ${{ steps.get-paper-title.outputs.PAPER_TITLE }}
             Original URL: ${{ github.event.inputs.paper_url }}
             Converted paper: ${{ steps.upload-paper.outputs.artifact-url }}
 
