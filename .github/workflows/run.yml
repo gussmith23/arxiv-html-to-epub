@@ -46,7 +46,7 @@ jobs:
       - name: Get paper title
         id: get-paper-title
         run: |
-          echo "PAPER_TITLE=$(xmllint -html -xpath '//head/title/text()' -)" >> $GITHUB_OUTPUT"
+          echo "PAPER_TITLE=$(xmllint -html -xpath '//head/title/text()' -)" >> "$GITHUB_OUTPUT"
 
       - name: Post comment on issue with link to paper artifact
         uses: peter-evans/create-or-update-comment@v4
