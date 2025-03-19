@@ -33,8 +33,7 @@ jobs:
             const filteredComments = comments.filter(comment => comment.reactions["+1"] > 0);
             console.log(JSON.stringify(filteredComments));
 
-            return;
-            // Move the comments to the archive list issue.
+             // Move the comments to the archive list issue.
             for (const comment of filteredComments) {
               await github.issues.createComment({
                 owner: context.repo.owner,
