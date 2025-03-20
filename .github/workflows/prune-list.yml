@@ -34,8 +34,8 @@ jobs:
             }));
 
             const filteredComments = commentsAndDetails.filter(([comment, reactionDetails]) => {
+                console.log(reactionDetails);
               return (new Array(reactionDetails)).some((reaction) => {
-                console.log(reaction);
                 return reaction["user"]["login"] === ${{ env.AUTHOR }} && reaction["content"] === "+1";
               });
             });
