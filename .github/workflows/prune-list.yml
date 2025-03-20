@@ -35,15 +35,11 @@ jobs:
 
             const filteredComments = commentsAndDetails.filter(([comment, reactionDetails]) => {
               return reactionDetails.some((reaction) => {
-                console.log(reaction);
-                console.log(reaction["user"]["login"] === "${{ env.AUTHOR }}");
-                console.log(reaction["content"] === "+1");
                 return reaction["user"]["login"] === "${{ env.AUTHOR }}" && reaction["content"] === "+1";
               });
             });
 
-            console.log(`Moving the following comments to the archive list issue:\n ${JSON.stringify(filteredComments, null, 2)}`);
-            return;
+            console.log(`Moving the following ${filteredComments.length} comments to the archive list issue:\n ${JSON.stringify(filteredComments, null, 2)}`);
 
             // Move the comments to the archive list issue.
             for (const comment of filteredComments) {
