@@ -33,7 +33,7 @@ jobs:
               return Promise.all([Promise.resolve(comment), github.request(comment["url"])]);
             }));
 
-            const filteredComments = commentsAndDetails.filter([comment, reactionDetails] => {
+            const filteredComments = commentsAndDetails.filter(([comment, reactionDetails]) => {
               return reactionDetails.some((reaction) => {
                 return reaction.user.login === ${{ env.AUTHOR }} && reaction.content === "+1";
               });
