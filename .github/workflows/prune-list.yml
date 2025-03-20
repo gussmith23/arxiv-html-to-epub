@@ -6,6 +6,7 @@ on:
 env:
   PAPER_LIST_ISSUE_NO: 1
   ARCHIVE_LIST_ISSUE_NO: 2
+  AUTHOR: gussmith23
 
 jobs:
   run:
@@ -29,9 +30,13 @@ jobs:
             console.log(JSON.stringify(comments));
 
 
-            // Filter comments that have a :+1: reaction.
-            const filteredComments = comments.filter(comment => comment.reactions["+1"] > 0);
-            console.log(JSON.stringify(filteredComments));
+            // Filter comments that have a :+1: reaction from ${{ env.AUTHOR }}.
+
+            const filteredComments = comments.filter(comment => {
+              let comment_detail = github.request(comment.url);
+              console.log(JSON.stringify(comment_detail));
+              });
+            return;
 
              // Move the comments to the archive list issue.
             for (const comment of filteredComments) {
