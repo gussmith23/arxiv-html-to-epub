@@ -30,7 +30,7 @@ jobs:
             // Filter comments that have a :+1: reaction from ${{ env.AUTHOR }}.
 
             const commentsAndDetails = await Promise.all(comments.map((comment) => {
-              return Promise.all([Promise.resolve(comment), github.request(comment["url"])]);
+              return Promise.all([Promise.resolve(comment), github.request(comment.reactions.url).then(({ data }) => data)]);
             }));
 
             const filteredComments = commentsAndDetails.filter(([comment, reactionDetails]) => {
