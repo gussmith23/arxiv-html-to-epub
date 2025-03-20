@@ -29,13 +29,20 @@ jobs:
 
             // Filter comments that have a :+1: reaction from ${{ env.AUTHOR }}.
 
-            const filteredComments = comments.filter(comment => {
-              let comment_detail = await github.request(comment["url"]);
-              console.log(JSON.stringify(comment_detail));
+            const commentAndDetails = await Promise.all(comments.map((comment) => {
+              return Promise.all([Promise.resolve(comment), github.request(comment["url"])]);
+            }));
+
+            const filteredComments = commentsAndDetails.filter([comment, reactionDetails] => {
+              return reactionDetails.some((reaction) => {
+                return reaction.user.login === ${{ env.AUTHOR }} && reaction.content === "+1";
               });
+            });
+
+            console.log(`Moving the following comments to the archive list issue:\n ${filteredComments.map((comment) => comment.id).join("\n")}`);
             return;
 
-             // Move the comments to the archive list issue.
+            // Move the comments to the archive list issue.
             for (const comment of filteredComments) {
               await github.issues.createComment({
                 owner: context.repo.owner,
