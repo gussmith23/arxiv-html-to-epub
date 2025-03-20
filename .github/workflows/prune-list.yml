@@ -42,7 +42,7 @@ jobs:
               });
             });
 
-            console.log(`Moving the following comments to the archive list issue:\n ${filteredComments.map((comment) => comment.id).join("\n")}`);
+            console.log(`Moving the following comments to the archive list issue:\n ${filteredComments.map((comment) => JSON.stringify(comment)).join("\n")}`);
             return;
 
             // Move the comments to the archive list issue.
