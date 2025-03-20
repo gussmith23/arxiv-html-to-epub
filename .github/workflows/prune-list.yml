@@ -33,7 +33,7 @@ jobs:
             // Filter comments that have a :+1: reaction from ${{ env.AUTHOR }}.
 
             const filteredComments = comments.filter(comment => {
-              let comment_detail = github.request(comment.url);
+              let comment_detail = github.request(comment["url"]);
               console.log(JSON.stringify(comment_detail));
               });
             return;
